@@ -21,6 +21,11 @@ redhat_pkg_install:
  - iputils
  - sudo
 
+kylin_server_pkg_install:
+ - git
+ - iputils
+ - sudo
+
 ubuntu_pkg_removals:
  - lxd
  - lxc
@@ -28,6 +33,11 @@ ubuntu_pkg_removals:
  - open-iscsi
 
 redhat_pkg_removals:
+ - "{% if enable_nova_libvirt_container | bool %}libvirt{% endif %}"
+ - "{% if enable_nova_libvirt_container | bool %}libvirt-daemon{% endif %}"
+ - "{% if enable_nova_libvirt_container | bool %}iscsi-initiator-utils{% endif %}"
+
+kylin_server_pkg_removals:
  - "{% if enable_nova_libvirt_container | bool %}libvirt{% endif %}"
  - "{% if enable_nova_libvirt_container | bool %}libvirt-daemon{% endif %}"
  - "{% if enable_nova_libvirt_container | bool %}iscsi-initiator-utils{% endif %}"

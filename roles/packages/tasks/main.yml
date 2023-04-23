@@ -4,6 +4,7 @@
     pkg_installs: >-
       {{ ubuntu_pkg_install if ansible_facts.os_family == 'Debian'
          else openeuler_pkg_install if ansible_facts.distribution == 'openEuler'
+         else kylin_server_pkg_install if ansible_facts.distribution == 'Kylin Linux Advanced Server'
          else redhat_pkg_install }}
   package:
     name: "{{ pkg_installs | select | list }}"
@@ -16,6 +17,7 @@
   vars:
     pkg_removals: >-
       {{ ubuntu_pkg_removals if ansible_facts.os_family == 'Debian'
+         else kylin_server_pkg_removals if ansible_facts.distribution == 'Kylin Linux Advanced Server'
          else redhat_pkg_removals }}
   package:
     name: "{{ pkg_removals | select | list }}"

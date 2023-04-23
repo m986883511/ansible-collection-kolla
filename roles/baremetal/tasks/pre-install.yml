@@ -50,7 +50,7 @@
     value: '0 2147483647'
     state: present
     sysctl_file: "{{ kolla_sysctl_conf_path }}"
-  when: ansible_facts.os_family == 'RedHat'
+  when: ansible_facts.os_family == 'RedHat' or ansible_facts.os_family == 'Kylin Linux Advanced Server'
 
 # NOTE(osmanlicilegi): The distribution might come with cloud-init installed, and manage_etc_hosts
 # configuration enabled. If so, it will override the file /etc/hosts from cloud-init templates at
