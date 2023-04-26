@@ -27,7 +27,7 @@
         state: link
       become: true
       when: not docker_unit_file.stat.exists
-  when: ansible_facts.os_family == 'Debian'
+  when: 'ansible_facts.os_family in debian_os_family'
 
 - name: Install packages
   package:

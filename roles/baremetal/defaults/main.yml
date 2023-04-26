@@ -1,4 +1,11 @@
 ---
+redhat_os_family:
+  - RedHat
+  - Kylin Linux Advanced Server
+
+debian_os_family:
+  - Debian
+
 ceph_version: "quincy"
 epel_version: "9"
 ceph_url: "https://download.ceph.com"
@@ -36,3 +43,4 @@ git_http_proxy: ""
 git_https_proxy: ""
 
 node_config_directory: "/etc/kolla"
+

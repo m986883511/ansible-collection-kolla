@@ -1,4 +1,12 @@
 ---
+
+redhat_os_family:
+  - RedHat
+  - Kylin Linux Advanced Server
+
+debian_os_family:
+  - Debian
+
 # APT cache TTL in seconds.
 apt_cache_valid_time: 3600
 
@@ -18,13 +26,13 @@ docker_yum_url: "https://download.docker.com/linux/centos"
 docker_yum_baseurl: "{{ docker_yum_url }}/$releasever/$basearch/stable"
 docker_yum_gpgkey: "{{ docker_yum_url }}/gpg"
 docker_yum_gpgcheck: true
-docker_yum_package: "{% if ansible_facts.distribution == 'openEuler' %}docker{{ '-' + docker_yum_package_pin if (docker_yum_package_pin | length > 0) else '' }}{% else %}docker-ce{{ '-' + docker_yum_package_pin if (docker_yum_package_pin | length > 0) else '' }}{% endif %}"
+docker_yum_package: "{% if ansible_facts.distribution == 'openEuler' or ansible_facts.distribution == 'Kylin Linux Advanced Server' %}docker{{ '-' + docker_yum_package_pin if (docker_yum_package_pin | length > 0) else '' }}{% else %}docker-ce{{ '-' + docker_yum_package_pin if (docker_yum_package_pin | length > 0) else '' }}{% endif %}"
 docker_yum_package_pin: ""
 
 # List of packages to install.
 docker_packages:
-  - "{{ docker_apt_package if ansible_facts.os_family == 'Debian' else docker_yum_package }}"
-  - "{% if ansible_facts.os_family == 'Debian' %}apparmor{% endif %}"
+  - "{{ docker_apt_package if ansible_facts.os_family in debian_os_family else docker_yum_package }}"
+  - "{% if ansible_facts.os_family in debian_os_family %}apparmor{% endif %}"
   - "{% if not docker_disable_default_iptables_rules | bool %}iptables{% endif %}"
 
 docker_storage_driver: ""
@@ -45,7 +53,7 @@ docker_disable_ip_forward: "{{ docker_disable_default_iptables_rules }}"
 docker_runtime_directory: ""
 
 # NOTE(mnasiadka): Lower 1073741816 nofile limit on EL9 (RHEL9/CentOS Stream 9/Rocky Linux 9)
-docker_ulimit_nofile: "{{ ansible_facts.os_family == 'RedHat' and ansible_facts.distribution_major_version == '9' }}"
+docker_ulimit_nofile: "{{ ansible_facts.os_family in redhat_os_family and ansible_facts.distribution_major_version == '9' }}"
 docker_ulimit_nofile_hard: 1048576
 docker_ulimit_nofile_soft: 1048576
 
@@ -59,3 +67,5 @@ docker_registry_ca:
 # Whether to configure Docker and containerd for Zun.
 docker_configure_for_zun: false
 containerd_configure_for_zun: "{{ docker_configure_for_zun | bool }}"
+
+

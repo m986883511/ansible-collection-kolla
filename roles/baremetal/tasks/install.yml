@@ -6,7 +6,7 @@
       ufw:
         state: disabled
         policy: allow
-      when: ansible_facts.os_family == 'Debian'
+      when: 'ansible_facts.os_family in debian_os_family'
       ignore_errors: yes
 
     - name: Check if firewalld is installed
@@ -16,7 +16,7 @@
       failed_when: firewalld_check.rc > 1
       args:
         warn: false
-      when: ansible_facts.os_family == 'RedHat' or ansible_facts.os_family == 'Kylin Linux Advanced Server'
+      when: 'ansible_facts.os_family in redhat_os_family'
 
     - name: Disable firewalld
       become: True
@@ -27,7 +27,7 @@
       with_items:
         - firewalld
       when:
-        - ansible_facts.os_family == 'RedHat' or ansible_facts.os_family == 'Kylin Linux Advanced Server'
+        - 'ansible_facts.os_family in redhat_os_family'
         - firewalld_check.rc == 0
   when: disable_firewall | bool
 
